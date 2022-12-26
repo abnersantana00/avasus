@@ -16,7 +16,7 @@ class cidadao(models.Model):
         ("PROF", "Professor"),
         ("ALU", "Aluno"),
     )
-    perfil = models.CharField(choices=TIPO_CIDADAO, max_length=10)
+    perfil = models.CharField(choices=TIPO_CIDADAO, max_length=4)
 
     def __str__(self):
         return self.nome

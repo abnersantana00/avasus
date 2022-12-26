@@ -57,16 +57,9 @@ def cadastro(request):
                     request, 'CPF inválido ou já está cadastrado')
                 salvar = False
     # extrair o nome do grupo de atendimento XML
-    tree = ET.parse(
-        'C:\\Users\\abner\\Desktop\\lais-agenda\\lais\\templates\\grupos_atendimento.xml')
-    xml = tree.getroot()
-    grp_atend = {}
-    i = 1
-    for filho in xml:
-        grp_atend[str(i)] = filho[0].text
-        i = i + 1
 
-    return render(request, "cadastro.html", {"grp_atend": grp_atend})
+
+    return render(request, "cadastro.html")
 
 
 def login(request):
