@@ -3,7 +3,67 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import *
+#from avasus.validacoes import validaData (insira a biblioteca para validar a data )
+from validate_docbr import CPF
 # Create your views here.
+
+def cadastro(request):
+    # Receber os dados
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        cpf = request.POST.get('cpf')
+        nasc = request.POST.get('nasc')
+        grp = request.POST.get('grp')
+        teve_covid = request.POST.get('teve_covid')
+        senha1 = request.POST.get('senha1')
+        senha2 = request.POST.get('senha2')
+    # validar os dados recebidos
+    # validar CPF
+        salvar = True
+        _cpf = CPF()
+        if _cpf.validate(cpf) == False:
+            messages.error(request, 'CPF Inválido!')
+            salvar = False
+
+    # Validar a Data Nascimento
+        if validaData(nasc) == False:
+            messages.error(request, 'Data inválida ou Menor de 18 anos!')
+            salvar = False
+    # Validar a senha
+        if senha1 != senha2:
+            messages.error(request, 'As senhas não conferem!')
+            salvar = False
+        # if teve_covid == 'sim':
+        #    messages.error(request, 'Você teve COVID nos ultimos 30 dias!')
+        #    salvar = False
+        # if grp == "67" or grp == "65" or grp == "70":
+        #    messages.error(
+        #        request, 'Seu grupo de atendimento não permite cadastrar!')
+        #    salvar = False
+        # Se o CPF NÃO estiver cadastrado, então salve os dados user
+        if salvar and True:
+            try:
+                user = User.objects.create_user(
+                    username=cpf,
+                    password=senha1,)
+                user.save()
+                cid = cidadao(nome=nome, cpf=user, nasc=nasc,
+                              grp_atend=grp, teve_covid=teve_covid, senha=senha1)
+                cid.save()
+                messages.success(
+                    request, 'Cadastro realizado com sucesso!')
+            except:
+                messages.error(
+                    request, 'CPF inválido ou já está cadastrado')
+                salvar = False
+    # extrair o nome do grupo de atendimento XML
+   
+    grp_atend = {}
+    i = 1
+
+
+    return render(request, "cadastro.html", {"grp_atend": grp_atend})
+
 
 def login(request):
     if request.method == 'POST':
