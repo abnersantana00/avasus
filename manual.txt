@@ -5,6 +5,7 @@ venv/scripts/activate
 3 - Insalar o Django (Versão 4.1)
 python -m pip install Django
 5 - Criar um novo projeto
- django-admin startproject avasus
-
+ django-admin startproject avasus .
+6 - Criar um app chamado forum
+python manage.py startapp forum
 6 - Executar o projeto
