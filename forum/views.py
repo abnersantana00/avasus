@@ -7,6 +7,7 @@ from django.contrib.auth import *
 from validate_docbr import CPF
 # Create your views here.
 
+
 def cadastro(request):
     # Receber os dados
     if request.method == 'POST':
@@ -61,7 +62,7 @@ def cadastro(request):
 
     return render(request, "cadastro.html")
 
-
+# Historia de Usuario 3 - Página de Login
 def login(request):
     if request.method == 'POST':
         cpf = request.POST.get('cpf')
