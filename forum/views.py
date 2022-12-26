@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import *
-#from avasus.validacoes import validaData (insira a biblioteca para validar a data )
+#from lais.validacoes import validaData (insira a biblioteca para validar a data )
 from validate_docbr import CPF
 # Create your views here.
 
@@ -57,10 +57,14 @@ def cadastro(request):
                     request, 'CPF inválido ou já está cadastrado')
                 salvar = False
     # extrair o nome do grupo de atendimento XML
-   
+    tree = ET.parse(
+        'C:\\Users\\abner\\Desktop\\lais-agenda\\lais\\templates\\grupos_atendimento.xml')
+    xml = tree.getroot()
     grp_atend = {}
     i = 1
-
+    for filho in xml:
+        grp_atend[str(i)] = filho[0].text
+        i = i + 1
 
     return render(request, "cadastro.html", {"grp_atend": grp_atend})
 
