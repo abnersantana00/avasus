@@ -8,7 +8,4 @@ python -m pip install Django
  django-admin startproject avasus .
 6 - Criar um app chamado forum
 python manage.py startapp forum
-7 - Criar as views
-	instalar biblioteca que valida documentos brasileiros 
-	para validar o CPF
 6 - Executar o projeto

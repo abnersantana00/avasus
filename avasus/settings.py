@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-wu1f#8$=%v0zb5o462u$*9^ch#h8=umz4ar5+6^(r8g)m5ik*r
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'forum.CustomUser'
 
 # Application definition
 
