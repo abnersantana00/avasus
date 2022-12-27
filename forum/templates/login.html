@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Login</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <style type="text/css">
+      .back {
+        background: #e2e2e2;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+      }
+      
+      .div-center {
+        width: 400px;
+        height: 400px;
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto;
+        padding: 1em 2em;
+        border-bottom: 2px solid #ccc;
+        display: table;
+      }
+      
+      div.content {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  
+
+    <div class="back">
+
+
+      <div class="div-center">
+    
+    
+        <div class="content">
+          <span style='font-size:30px;'>&#127973;</span>
+    
+          <h4>AVASUS 2023 - LAIS/UFRN</h4> 
+          <hr />
+          <form action="" method="post">
+            {%csrf_token%}
+            <div class="form-group">
+              <span >&#128100;</span>
+              <label class ="py-2">Login (CPF)</label>
+              <input type="number" class="form-control" placeholder="CPF : Apenas Números" name="cpf" required autofocus/>
+            </div>
+            <div class="form-group">
+              <span>&#128273;</span>
+              <label class ="py-2" >Senha</label>
+              <input type="password" class="form-control" placeholder="Digite sua senha" name="senha" required/>
+            </div>
+            <div class="my-2">
+            {% if messages %}
+            {% for message in messages %}
+              {%if message.tags == 'error' %}
+          <div class="alert alert-danger alert-dismissible fade show " role="alert">
+            <strong>Atenção!</strong> {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+            <br>
+            <button type="submit" class="btn btn-success">
+    
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+              </svg>
+               ENTRAR 
+              
+            </button>
+            
+            <a href="cadastro" class="btn btn-primary" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+                <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5h3Z"/>
+                <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-12Z"/>
+                <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3Z"/> 
+              </svg>
+              CADASTRE-SE
+            </a>
+            <br><br>
+            <hr />
+            <button type="button" class="btn btn-link">Esqueceu sua senha ?</button>
+    
+          </form>
+    
+        </div>
+    
+    
+        </span>
+      </div>
+
+
+
+  </body>
+</html>
