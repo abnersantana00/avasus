@@ -11,6 +11,7 @@ from django.contrib.auth import *
 #from avasus.validacoes import validaData (insira a biblioteca para validar a data )
 from validate_docbr import CPF
 from forum.validacoes import validaData
+from django.contrib.auth import login as authlogin, logout
 
 # Create your views here.
 
@@ -27,7 +28,6 @@ def cadastro(request):
         senha2 = request.POST.get('senha2')
         termos = request.POST.get('termos')
         print(nome_completo, nome_social, cpf, nasc, estado, cidade, senha1, senha2, termos)
-    # validar os dados recebidos
     # validar CPF
         salvar = True
         _cpf = CPF()
@@ -48,28 +48,14 @@ def cadastro(request):
             salvar = False
         if salvar and True:
             try:
-                user = CustomUser.objects.create(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade)
-                print('printando USER', user)
-                #user = User.objects.create_user(
-                #    username=cpf,
-                #    password=senha1,)
-                #user.save()
-                #cid = cidadao(nome=nome, cpf=user, nasc=nasc,
-                #              grp_atend=grp, teve_covid=teve_covid, senha=senha1)
-                #cid.save()
+                CustomUser.objects.create(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade)
                 messages.success(
                     request, 'Cadastro realizado com sucesso!')
             except:
                 messages.error(
-                    request, 'CPF inválido ou já está cadastrado')
+                    request, 'Usuario já está cadastrado')
                 salvar = False
-    # extrair o nome do grupo de atendimento XML
-   
-    grp_atend = {}
-    i = 1
-
-
-    return render(request, "cadastro.html", {"grp_atend": grp_atend})
+    return render(request, "cadastro.html")
 
 
 def login(request):
@@ -77,10 +63,17 @@ def login(request):
         cpf = request.POST.get('cpf')
         senha = request.POST.get('senha')
         # verrificar se CPF e Senha informada é igual no BD
-        user = authenticate(request, username=cpf, password=senha)
+        user = authenticate(request, cpf=cpf, password=senha)
+        print("  USERRR  ", user)
         if user is not None:
-            login(request, user)
+            authlogin(request,user)
             return redirect('pag-inicial')
         else:
             messages.error(request, 'CPF ou Senha Incorreta!')
     return render(request, "login.html")
+
+
+def pag_inicial(request):
+    if request.method == 'POST':
+        ...
+    return render(request, "pag-inicial.html")
