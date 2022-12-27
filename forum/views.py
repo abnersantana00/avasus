@@ -12,7 +12,11 @@ from django.contrib.auth import *
 from validate_docbr import CPF
 from forum.validacoes import validaData
 from django.contrib.auth import login as authlogin, logout
+import datetime
 
+
+from time import time
+import calendar
 # Create your views here.
 
 def cadastro(request):
@@ -59,6 +63,8 @@ def cadastro(request):
 
 
 def login(request):
+    if request.user.is_authenticated == True:
+        return redirect('pag-inicial')
     if request.method == 'POST':
         cpf = request.POST.get('cpf')
         senha = request.POST.get('senha')
@@ -72,11 +78,30 @@ def login(request):
             messages.error(request, 'CPF ou Senha Incorreta!')
     return render(request, "login.html")
 
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 def pag_inicial(request):
     # se usuario esta autenticado libere
     if request.user.is_authenticated == True:
-        return render(request, "pag-inicial.html")
+
+        cpf = request.user.cpf
+        nome = request.user.nome_completo
+        nasc = CustomUser.objects.filter(cpf=cpf).values_list('nasc')
+        dias_ano = 365.2425
+        idade = int((datetime.date.today() - nasc[0][0]).days / dias_ano)
+       
+    
+       
+
+        context = {
+            'cpf' : str(cpf),
+            'nome' : str(nome),
+            'idade' : str(idade),
+            'nasc' : nasc[0][0],
+        }
+        return render(request, "pag-inicial.html", context)
     else:
         return redirect('/') # se nao autenticado redireciona pra login
     

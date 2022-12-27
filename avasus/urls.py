@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from forum.views import login, cadastro, pag_inicial
+from forum.views import login, logout_view, cadastro, pag_inicial
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', login, name='login'),
     path('cadastro', cadastro, name='cadastro'),
     path('pag-inicial', pag_inicial, name='pag-inicial'),
+    path('logout', logout_view, name="logout"),
 ]
