@@ -3,6 +3,7 @@ from .manager import *
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from datetime import date
+
 class CustomUser(AbstractUser):
     username = None
     nome_completo = models.CharField(max_length=60, default=' ')
