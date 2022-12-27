@@ -74,6 +74,11 @@ def login(request):
 
 
 def pag_inicial(request):
-    if request.method == 'POST':
-        ...
-    return render(request, "pag-inicial.html")
+    # se usuario esta autenticado libere
+    if request.user.is_authenticated == True:
+        return render(request, "pag-inicial.html")
+    else:
+        return redirect('/') # se nao autenticado redireciona pra login
+    
+    
+    
