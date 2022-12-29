@@ -65,7 +65,7 @@
                 <br><br>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
+<button  type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
   Criar Subforum
 </button>
 
@@ -82,32 +82,33 @@
       <div class="modal-body">
       <!-- Formulario cadastrar novo subforum-->
 
-      <form>
+      <form method="post">
+        {%csrf_token%}
         <div class="form-group">
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Titulo do subforum">
+          <input type="text" class="form-control"  placeholder="Titulo do subforum (Máx 120 caracteres)"  maxlength="120" name="titulo">
         </div>
         <div class="form-group">
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição (Máx 120 caracteres)"></textarea>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição " name="desc"></textarea>
         </div>
-
         <div class="form-group">
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="exampleFormControlSelect1" required name="categoria">
             <option value="" disabled selected>Selecione uma categoria</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option value="1"> 1 - Sífilis e outras IST</option>
+            <option value="2"> 2 - Covid-19</option>
+            <option value="3"> 3 - Preceptoria </option>
+            <option value="4"> 4 - Doenças Raras </option>
+            <option value="5"> 5 - Web Palestras </option>
+            <option value="6"> 6 - Sistema Prisional </option>
+            <option value="7"> 7 - OPAS </option>
           </select>
         </div>
-       
-        
-      </form>
-
-
-
-      </div>
-      <div class="modal-footer">
+      
+        </div>
+        <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success">Salvar</button>
+        <button type="submit" class="btn btn-success">Salvar</button>
+
+      </form>
       </div>
     </div>
   </div>
@@ -119,7 +120,7 @@
               </div>
               <div class="col-sm">
                 <p class="h5"> Informações importantes </p>
-           
+                <p>- Apenas professores podem criar subforuns -</p>
                 <p> O fórum que permite a troca de experiências e interação entre alunos de
                   cursos à distância para otimizar o seu aprendizado. Ela designa um grupo de pessoas
                   que se unem em torno de um mesmo tópico ou interesse. Essas pessoas trabalham
@@ -130,12 +131,19 @@
             </div>
             </div>
           </form>
+          <!-- Listagem dos subforuns do professor -->
+          <div class="card-header h5">
+            Listagem dos subforuns
+          </div>
             <hr>
             <footer>
               <p class="h6">LAIS/HUOL - UFRN - Laboratório de Inovação Tecnológica em Saúde | Av. Nilo Peçanha, 620 - 59012-300 Petrópolis - Natal/RN - Brasil </p>
               </footer>
            
           </div>
+
+          
+
         </div>
   </body>
 </html>

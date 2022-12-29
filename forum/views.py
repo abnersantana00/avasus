@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import CustomUser, Subforum, Categoria
 from .manager import *
 from django.contrib.auth import *
 #from avasus.validacoes import validaData (insira a biblioteca para validar a data )
@@ -13,7 +13,8 @@ from validate_docbr import CPF
 from forum.validacoes import validaData
 from django.contrib.auth import login as authlogin, logout
 import datetime
-
+from django.utils import timezone
+from .manager import *
 
 from time import time
 import calendar
@@ -21,6 +22,7 @@ import calendar
 
 def cadastro(request):
     # Receber os dados
+    
     if request.method == 'POST':
         nome_completo = request.POST.get('nome_completo')
         nome_social = request.POST.get('nome_social')
@@ -31,7 +33,6 @@ def cadastro(request):
         senha1 = request.POST.get('senha1')
         senha2 = request.POST.get('senha2')
         termos = request.POST.get('termos')
-        print(nome_completo, nome_social, cpf, nasc, estado, cidade, senha1, senha2, termos)
     # validar CPF
         salvar = True
         _cpf = CPF()
@@ -51,8 +52,10 @@ def cadastro(request):
             messages.error(request, 'Voce precisa concordar com os temos de uso!')
             salvar = False
         if salvar and True:
+            
+           
             try:
-                CustomUser.objects.create(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade)
+                CustomUser.objects.create_user(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade, password=senha1)
                 messages.success(
                     request, 'Cadastro realizado com sucesso!')
             except:
@@ -85,21 +88,39 @@ def logout_view(request):
 def pag_inicial(request):
     # se usuario esta autenticado libere
     if request.user.is_authenticated == True:
-
         cpf = request.user.cpf
         nome = request.user.nome_completo
         nasc = CustomUser.objects.filter(cpf=cpf).values_list('nasc')
         dias_ano = 365.2425
         idade = int((datetime.date.today() - nasc[0][0]).days / dias_ano)
-       
-    
-       
 
+       
+        if CustomUser.objects.filter(cpf=cpf).values_list('perfil') == 'ALU':
+            bloquear = 'disabled'
+        else:
+            bloquear=''
+        # cadastrar novo subforum (Se for professor)
+        if request.method == 'POST':
+            titulo = request.POST.get('titulo')
+            desc = request.POST.get('desc')
+            categoria = request.POST.get('categoria')
+        # salvar no banco o subforum criado pelo professor
+            cat_select = Categoria.objects.filter(id=categoria[0])
+            _cpf = CustomUser.objects.filter(cpf=cpf)
+            try:
+                Subforum.objects.get_or_create(autor = _cpf[0], cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
+                messages.success(
+                    request, 'Cadastro realizado com sucesso!')
+            except:
+                print("algo deu errado")
+                messages.error(
+                    request, 'Algo deu errado')
         context = {
             'cpf' : str(cpf),
             'nome' : str(nome),
             'idade' : str(idade),
             'nasc' : nasc[0][0],
+            'bloquear' : bloquear
         }
         return render(request, "pag-inicial.html", context)
     else:
