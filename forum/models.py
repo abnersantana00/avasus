@@ -4,7 +4,6 @@ from .manager import *
 from django.contrib.auth.models import AbstractUser
 from datetime import date
 from django.utils import timezone
-import datetime
 
 class CustomUser(AbstractUser):
     username = None
@@ -27,6 +26,9 @@ class Categoria(models.Model):
     id = models.IntegerField(primary_key=True)
     nome = models.CharField(max_length=45, default=" ")
 
+    def __str__(self):
+        return self.nome
+
 class Subforum(models.Model):
     cod_subforum = models.AutoField(primary_key=True)
     autor = autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -39,6 +41,9 @@ class Subforum(models.Model):
         ("TRC", "Trancado"),
     )
     estado = models.CharField(choices=ESTADO, max_length=4, default='ATV')
+
+    def __str__(self):
+        return self.titulo
     
 
 class Topico(models.Model):
@@ -48,3 +53,6 @@ class Topico(models.Model):
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.titulo
