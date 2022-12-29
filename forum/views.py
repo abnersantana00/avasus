@@ -94,13 +94,13 @@ def pag_inicial(request):
         dias_ano = 365.2425
         idade = int((datetime.date.today() - nasc[0][0]).days / dias_ano)
 
-       
-        if CustomUser.objects.filter(cpf=cpf).values_list('perfil') == 'ALU':
+        perfil =  CustomUser.objects.filter(cpf=cpf).values_list('perfil')
+        if  perfil[0][0] == 'ALU':
             bloquear = 'disabled'
         else:
             bloquear=''
         # cadastrar novo subforum (Se for professor)
-        if request.method == 'POST':
+        if request.method == 'POST' and perfil != 'ALU':
             titulo = request.POST.get('titulo')
             desc = request.POST.get('desc')
             categoria = request.POST.get('categoria')
