@@ -20,3 +20,24 @@ class CustomUser(AbstractUser):
     objects = UserManager()
     USERNAME_FIELD = 'cpf'
     REQUIRED_FIELDS = []
+
+class Categoria(models.Model):
+    id = models.IntegerField(primary_key=True)
+    nome = models.IntegerField(max_length=45, default=" ")
+
+class Subforum(models.Model):
+    cod_subforum = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=120, default=' ')
+    descricao = models.CharField(max_length=512, default=' ')
+    data_criacao = models.DateField(default=date.today())
+    ESTADO = (
+        ("ATV", "Ativado"),
+        ("TRC", "Trancado"),
+    )
+    estado = models.CharField(choices=ESTADO, max_length=4, default='ATV')
+
+class Topico(models.Model):
+    cod_topico = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=120, default=' ')
+    descricao = models.CharField(max_length=512, default=' ')
+    data_criacao = models.DateTimeField(default=date.today())
