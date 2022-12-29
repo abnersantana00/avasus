@@ -3,13 +3,15 @@ from .manager import *
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from datetime import date
+from django.utils import timezone
+import datetime
 
 class CustomUser(AbstractUser):
     username = None
     nome_completo = models.CharField(max_length=60, default=' ')
     nome_social = models.CharField(max_length=50, default=' ')
     cpf = models.CharField(unique=True, max_length=11)
-    nasc = models.DateField(default=date.today())
+    nasc = models.DateField(default=timezone.now)
     estado = models.CharField(max_length=2, default=' ')
     cidade = models.CharField(max_length=50, default=' ')
     TIPO_USUARIO = (
@@ -23,7 +25,7 @@ class CustomUser(AbstractUser):
 
 class Categoria(models.Model):
     id = models.IntegerField(primary_key=True)
-    nome = models.IntegerField(max_length=45, default=" ")
+    nome = models.CharField(max_length=45, default=" ")
 
 class Subforum(models.Model):
     cod_subforum = models.AutoField(primary_key=True)
@@ -31,7 +33,7 @@ class Subforum(models.Model):
     cat_subforum = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
-    data_criacao = models.DateField(default=date.today())
+    data_criacao = models.DateTimeField(default=timezone.now)
     ESTADO = (
         ("ATV", "Ativado"),
         ("TRC", "Trancado"),
@@ -45,4 +47,4 @@ class Topico(models.Model):
     autor_topico = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
-    data_criacao = models.DateTimeField(default=date.today())
+    data_criacao = models.DateTimeField(default=timezone.now)
