@@ -27,6 +27,8 @@ class Categoria(models.Model):
 
 class Subforum(models.Model):
     cod_subforum = models.AutoField(primary_key=True)
+    autor = autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    cat_subforum = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateField(default=date.today())
@@ -35,9 +37,12 @@ class Subforum(models.Model):
         ("TRC", "Trancado"),
     )
     estado = models.CharField(choices=ESTADO, max_length=4, default='ATV')
+    
 
 class Topico(models.Model):
     cod_topico = models.AutoField(primary_key=True)
+    cod_subforum = models.ForeignKey(Subforum, on_delete=models.CASCADE)
+    autor_topico = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=date.today())
