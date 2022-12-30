@@ -73,7 +73,6 @@ def login(request):
         senha = request.POST.get('senha')
         # verrificar se CPF e Senha informada é igual no BD
         user = authenticate(request, cpf=cpf, password=senha)
-        print("  USERRR  ", user)
         if user is not None:
             authlogin(request,user)
             return redirect('pag-inicial')
@@ -100,27 +99,39 @@ def pag_inicial(request):
         else:
             bloquear=''
         # cadastrar novo subforum (Se for professor)
+        _cpf = CustomUser.objects.filter(cpf=cpf)
         if request.method == 'POST' and perfil != 'ALU':
             titulo = request.POST.get('titulo')
             desc = request.POST.get('desc')
             categoria = request.POST.get('categoria')
         # salvar no banco o subforum criado pelo professor
             cat_select = Categoria.objects.filter(id=categoria[0])
-            _cpf = CustomUser.objects.filter(cpf=cpf)
+            
+            
             try:
                 Subforum.objects.get_or_create(autor = _cpf[0], cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
                 messages.success(
                     request, 'Cadastro realizado com sucesso!')
             except:
-                print("algo deu errado")
+               
                 messages.error(
                     request, 'Algo deu errado')
+       
+        listagem_foruns = [("Titulo1", "Descricao", "Responsavel", 24),("Titulo1", "Descricao", "Responsavel", 24),("Titulo1", "Descricao", "Responsavel", 24) ]
+        
+      
+        subforuns_assoc = len(Subforum.objects.filter(autor_id=_cpf[0]))
+   
+
+
         context = {
             'cpf' : str(cpf),
             'nome' : str(nome),
             'idade' : str(idade),
             'nasc' : nasc[0][0],
-            'bloquear' : bloquear
+            'bloquear' : bloquear,
+            'subforuns_assoc' : subforuns_assoc,
+            'listagem_foruns' : listagem_foruns
         }
         return render(request, "pag-inicial.html", context)
     else:

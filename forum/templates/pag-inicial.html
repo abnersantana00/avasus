@@ -40,8 +40,8 @@
                 <thead class="table-light">
                   <tr>
                     <td class="table-secondary"><b>Nome Completo</b></td>
+                    <td class="table-secondary"><b>Nascimento</b></td>
                     <td class="table-secondary"><b>CPF</b></td>
-                    <td class="table-secondary"><b>Nasc</b></td>
                     <td class="table-secondary"><b>Idade</b></td>
                     <td class="table-secondary"><b>Subforuns Assoc.</b></td>
                   </tr>
@@ -52,7 +52,7 @@
                     <td class="table-light"><b>{{nasc | date:"d/m/Y"}}</b></td>
                     <td class="table-light"><b>{{cpf}}</b></td>
                     <td class="table-light"><b>{{idade}} anos</b></td>
-                    <td class="table-light"><b> #CONST </b></td>
+                    <td class="table-light"><b> {{subforuns_assoc}} </b></td>
                   </tr>
                 </tbody>
               </table>
@@ -130,7 +130,10 @@
           <div class="card-header h5">
             Listagem dos subforuns
           </div>
-
+            {{listagem_foruns}}
+            {% for i,j,k, l in listagem_foruns %}
+              {{i}} , {{j}} , {{k}} , {{l}}
+            {% endfor %}
           <table class="table table-bordered  table-hover">
             <thead class="table-light" >
               <tr>
