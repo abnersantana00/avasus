@@ -117,12 +117,12 @@ def pag_inicial(request):
                 messages.error(
                     request, 'Algo deu errado')
        
-        listagem_foruns = [("Titulo1", "Descricao", "Responsavel", 24),("Titulo1", "Descricao", "Responsavel", 24),("Titulo1", "Descricao", "Responsavel", 24) ]
+        
         
       
         subforuns_assoc = len(Subforum.objects.filter(autor_id=_cpf[0]))
-   
-
+        listagem_subforums = Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao')
+        
 
         context = {
             'cpf' : str(cpf),
@@ -131,7 +131,8 @@ def pag_inicial(request):
             'nasc' : nasc[0][0],
             'bloquear' : bloquear,
             'subforuns_assoc' : subforuns_assoc,
-            'listagem_foruns' : listagem_foruns
+            'listagem_subforums' : listagem_subforums
+            
         }
         return render(request, "pag-inicial.html", context)
     else:

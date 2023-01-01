@@ -130,10 +130,8 @@
           <div class="card-header h5">
             Listagem dos subforuns
           </div>
-            {{listagem_foruns}}
-            {% for i,j,k, l in listagem_foruns %}
-              {{i}} , {{j}} , {{k}} , {{l}}
-            {% endfor %}
+           {{listagem_subforums}}
+          
           <table class="table table-bordered  table-hover">
             <thead class="table-light" >
               <tr>
@@ -144,11 +142,11 @@
               </tr>
             </thead>
             <tbody>
-              
+              {% for titulo , descricao  in listagem_subforums %}
               <tr>
-              <td  class="table-light" > <p>  Titulo </p> </td>
+              <td  class="table-light" > <p>  {{titulo}} </p> </td>
               <td  class="table-light" >
-                  <p> Descrição</p> 
+                  <p> {{descricao}}</p> 
               </td>
               <td  class="table-light">
                   <p>Responsavel</p>
@@ -157,6 +155,7 @@
                    <p> #000</p>
               </td>
               </tr>
+              {% endfor %}
            
             </tbody>
           </table>

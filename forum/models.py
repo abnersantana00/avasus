@@ -9,7 +9,8 @@ class CustomUser(AbstractUser):
     username = None
     nome_completo = models.CharField(max_length=60, default=' ')
     nome_social = models.CharField(max_length=50, default=' ')
-    cpf = models.CharField(unique=True, max_length=11)
+    cpf = models.CharField(primary_key=True,  max_length=11)
+    #cpf = models.CharField( unique=True,  max_length=11)
     nasc = models.DateField(default=timezone.now)
     estado = models.CharField(max_length=2, default=' ')
     cidade = models.CharField(max_length=50, default=' ')
@@ -61,8 +62,8 @@ class Topico(models.Model):
 class AlunosVinculados(models.Model):
     ...
 
-class Resposta(models.Model):
-    cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
-    autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    texto = models.CharField(max_length=512, default=' ')
-    data_criacao = models.DateTimeField(default=timezone.now)
+#class Resposta(models.Model):
+#    cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
+#    autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+#    texto = models.CharField(max_length=512, default=' ')
+#    data_criacao = models.DateTimeField(default=timezone.now)
