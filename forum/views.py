@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CustomUser, Subforum, Categoria
+from .models import CustomUser, Subforum, Categoria, Topico
 from .manager import *
 from django.contrib.auth import *
 #from avasus.validacoes import validaData (insira a biblioteca para validar a data )
@@ -15,6 +15,7 @@ from django.contrib.auth import login as authlogin, logout
 import datetime
 from django.utils import timezone
 from .manager import *
+from django.db.models import Count
 
 from time import time
 import calendar
@@ -92,7 +93,6 @@ def pag_inicial(request):
         nasc = CustomUser.objects.filter(cpf=cpf).values_list('nasc')
         dias_ano = 365.2425
         idade = int((datetime.date.today() - nasc[0][0]).days / dias_ano)
-
         perfil =  CustomUser.objects.filter(cpf=cpf).values_list('perfil')
         if  perfil[0][0] == 'ALU':
             bloquear = 'disabled'
@@ -120,8 +120,41 @@ def pag_inicial(request):
         
         
       
-        subforuns_assoc = len(Subforum.objects.filter(autor_id=_cpf[0]))
-        listagem_subforums = Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao')
+        subforuns_assoc = len(Subforum.objects.filter(autor=_cpf[0]))
+
+        subforums = list(Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao', 'autor','cod_subforum'))
+        ### contar os topicos
+        topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
+        #print(listagem_subforums)
+        #print(topicos)
+
+        #x = listagem_subforums.intersection(topicos)
+        #print(x)
+        listagem_subforums = []
+        for titulo, descricao, autor, cod_subforum in subforums:
+            #print(cod_subforum)
+            for n in topicos:
+                if cod_subforum == n['cod_subforum']:
+                    #print("eh igual: ",cod_subforum, '=', n['cod_subforum'])
+                    listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
+            if listagem_subforums[-1][3] != cod_subforum:
+                listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+            
+            
+            
+                
+
+
+            # se ja ta listado não liste, se não então pode listar É AQUI QUE TEM QUE MUDAR O BAGULHO
+            #listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+            #listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))    
+            #print(cod_subforum, '=', n1['cod_subforum'])
+    
+        
+           
+
+      
+       
         
 
         context = {

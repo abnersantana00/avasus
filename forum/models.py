@@ -62,8 +62,8 @@ class Topico(models.Model):
 class AlunosVinculados(models.Model):
     ...
 
-#class Resposta(models.Model):
-#    cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
-#    autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#    texto = models.CharField(max_length=512, default=' ')
-#    data_criacao = models.DateTimeField(default=timezone.now)
+class Resposta(models.Model):
+    cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
+    autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    texto = models.CharField(max_length=512, default=' ')
+    data_criacao = models.DateTimeField(default=timezone.now)

@@ -48,12 +48,13 @@ class Lexer:
                 text = text.decode(encoding)
             else:
                 try:
-                    text = text.decode('utf-8')
+                    text = text.decode("utf-8")
                 except UnicodeDecodeError:
-                    text = text.decode('unicode-escape')
+                    text = text.decode("unicode-escape")
         else:
-            raise TypeError("Expected text or file-like object, got {!r}".
-                            format(type(text)))
+            raise TypeError(
+                "Expected text or file-like object, got {!r}".format(type(text))
+            )
 
         iterable = enumerate(text)
         for pos, char in iterable:

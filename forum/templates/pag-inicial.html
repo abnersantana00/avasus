@@ -142,17 +142,17 @@
               </tr>
             </thead>
             <tbody>
-              {% for titulo , descricao  in listagem_subforums %}
+              {% for titulo , descricao, responsavel, cod_subforum, topicos  in listagem_subforums %}
               <tr>
               <td  class="table-light" > <p>  {{titulo}} </p> </td>
               <td  class="table-light" >
                   <p> {{descricao}}</p> 
               </td>
               <td  class="table-light">
-                  <p>Responsavel</p>
+                  <p>{{responsavel}}</p>
               </td>
               <td  class="table-light">
-                   <p> #000</p>
+                   <p> {{topicos}}</p>
               </td>
               </tr>
               {% endfor %}
