@@ -172,4 +172,9 @@ def pag_inicial(request):
         return redirect('/') # se nao autenticado redireciona pra login
     
     
-    
+def post_subforum(request, cod_subforum):
+    if request.user.is_authenticated == True:
+        context = {
+        'cod_subforum': 1
+        }
+        return render(request, "subforum.html", context)

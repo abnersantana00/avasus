@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <link
+    href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    rel="stylesheet"
+    id="bootstrap-css"
+  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+  <!------ Include the above in your HEAD tag ---------->
+  </head>
+  <body>      
+      <div class="text-center text-lg-start ">
+        
+        <form action="" method="POST">
+          {%csrf_token%}
+          <div class="card container ">
+            <div class="card-header">
+              <nav class="navbar navbar-dark bg-primary">
+                <a class="navbar-brand" href="#">AVASUS FORUM - LAIS/UFRN 2023 </a>
+              </button>
+                <form class="form-inline my-2 my-lg-0">
+                  <a href="{% url 'logout' %}" class=" btn btn-warning ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                      <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                    </svg>
+                    SAIR</a>  
+                </form>
+              </nav>
+              
+            </div>  
+            <div class="card-body ">
+
+                <div class="row border border-primary rounded py-3 my-3">
+                    <div class="col-sm  ">
+                      
+      <!-- Button trigger modal -->
+      <br>
+      <button  type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
+        Criar tópico
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Criar novo topico</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <!-- Formulario cadastrar novo subforum-->
+      
+            <form method="post">
+              {%csrf_token%}
+              <div class="form-group">
+                <input type="text" class="form-control"  placeholder="Titulo do subforum (Máx 120 caracteres)"  maxlength="120" name="titulo">
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição " name="desc"></textarea>
+              </div>
+              <div class="form-group">
+                <select class="form-control" id="exampleFormControlSelect1" required name="categoria">
+                  <option value="" disabled selected>Selecione uma categoria</option>
+                  <option value="1"> 1 - Sífilis e outras IST</option>
+                  <option value="2"> 2 - Covid-19</option>
+                  <option value="3"> 3 - Preceptoria </option>
+                  <option value="4"> 4 - Doenças Raras </option>
+                  <option value="5"> 5 - Web Palestras </option>
+                  <option value="6"> 6 - Sistema Prisional </option>
+                  <option value="7"> 7 - OPAS </option>
+                </select>
+              </div>
+            
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success">Salvar</button>
+      
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+                      <br>
+                    </p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="h5"> Informações importantes </p><br>
+                      <p>- Apenas pessoas autorizadas podem criar topicos -</p>
+                    </div>
+                  </div>
+                  </div>
+                </form>
+
+
+                <div class="card-header h5">
+                    Subforum - Listagem de topicos
+                  </div>
+                  
+              <table class="table table  table-hover ">
+                <thead class="table-light">
+                  <tr>
+                    <td class="table-secondary"><b>Titulo</b></td>
+                    <td class="table-secondary"><b>Autor</b></td>
+                    <td class="table-secondary"><b>Criação</b></td>
+                    <td class="table-secondary"><b>Ultima Postagem</b></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="table-light"><b>Titulo</b></td>
+                    <td class="table-light"><b>Autor</b></td>
+                    <td class="table-light"><b>Data1</b></td>
+                    <td class="table-light"><b>Data2 </b></td>
+                   
+                  </tr>
+                </tbody>
+                
+              </table>
+              <br>
+              <div class="row mx-2">
+                <h6>Texto do topico: </h6>
+              </div>
+              <hr>
+
+              <div class="row mx-2">
+                <h5>Respostas: </h5>
+              </div>
+              <br>
+            <div class="row mx-2">
+                <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
+                    Responder tópico
+                  </button>  
+            </div>
+              
+
+
+            <hr>
+            <footer>
+              <p class="h6">LAIS/HUOL - UFRN - Laboratório de Inovação Tecnológica em Saúde | Av. Nilo Peçanha, 620 - 59012-300 Petrópolis - Natal/RN - Brasil </p>
+              </footer>
+           
+          </div>
+
+          
+
+        </div>
+  </body>
+</html>

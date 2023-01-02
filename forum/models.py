@@ -56,6 +56,12 @@ class Topico(models.Model):
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=timezone.now)
 
+    ESTADO = (
+        ("ATV", "Ativado"),
+        ("TRC", "Trancado"),
+    )
+    estado = models.CharField(choices=ESTADO, max_length=4, default='ATV')
+
     def __str__(self):
         return self.titulo
 

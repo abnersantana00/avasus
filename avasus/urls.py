@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from forum.views import login, logout_view, cadastro, pag_inicial
+from django.urls import path, re_path
+from forum.views import login, logout_view, cadastro, pag_inicial, post_subforum
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -23,4 +23,5 @@ urlpatterns = [
     path('cadastro', cadastro, name='cadastro'),
     path('pag-inicial', pag_inicial, name='pag-inicial'),
     path('logout', logout_view, name="logout"),
+    re_path(r'^(?P<cod_subforum>\d+)', post_subforum, name='subforum' )
 ]
