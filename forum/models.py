@@ -67,6 +67,9 @@ class Topico(models.Model):
 
 class AlunosVinculados(models.Model):
     ...
+    #CPF
+    #nome_completo
+    #nome_social
 
 class Resposta(models.Model):
     cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)

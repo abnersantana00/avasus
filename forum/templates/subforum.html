@@ -64,24 +64,11 @@
             <form method="post">
               {%csrf_token%}
               <div class="form-group">
-                <input type="text" class="form-control"  placeholder="Titulo do subforum (Máx 120 caracteres)"  maxlength="120" name="titulo">
+                <input type="text" class="form-control"  placeholder="Titulo do topico (Máx 120 caracteres)"  maxlength="120" name="titulo">
               </div>
               <div class="form-group">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição " name="desc"></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Texto do topico " name="desc"></textarea>
               </div>
-              <div class="form-group">
-                <select class="form-control" id="exampleFormControlSelect1" required name="categoria">
-                  <option value="" disabled selected>Selecione uma categoria</option>
-                  <option value="1"> 1 - Sífilis e outras IST</option>
-                  <option value="2"> 2 - Covid-19</option>
-                  <option value="3"> 3 - Preceptoria </option>
-                  <option value="4"> 4 - Doenças Raras </option>
-                  <option value="5"> 5 - Web Palestras </option>
-                  <option value="6"> 6 - Sistema Prisional </option>
-                  <option value="7"> 7 - OPAS </option>
-                </select>
-              </div>
-            
               </div>
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -104,50 +91,89 @@
                   </div>
                 </form>
 
-
+              
                 <div class="card-header h5">
                     Subforum - Listagem de topicos
                   </div>
+                  <br>
+                  <hr>
                   
-              <table class="table table  table-hover ">
-                <thead class="table-light">
-                  <tr>
-                    <td class="table-secondary"><b>Titulo</b></td>
-                    <td class="table-secondary"><b>Autor</b></td>
-                    <td class="table-secondary"><b>Criação</b></td>
-                    <td class="table-secondary"><b>Ultima Postagem</b></td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="table-light"><b>Titulo</b></td>
-                    <td class="table-light"><b>Autor</b></td>
-                    <td class="table-light"><b>Data1</b></td>
-                    <td class="table-light"><b>Data2 </b></td>
+       
+
+                  {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         
+                  <table class="table   table-hover">
+                    <thead class="table-light" >
+                      <tr>
+                        <td class="table-secondary" ><b>Titulo </b></td>
+                        <td class="table-secondary" ><b>Autor</b></td>
+                        <td class="table-secondary" ><b>Criado em</b></td>
+                        <td class="table-secondary" ><b>Ultima Postagem</b></td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                      <tr>
+                      <td  class="table-light" >  <p>{{titulo}}</p> </td>
+                      <td  class="table-light" >
+                          <p> {{autor}}</p> 
+                      </td>
+                      <td  class="table-light">
+                          <p>{{data_criacao | date:"d/m/Y - H:i" }}</p>
+                      </td>
+                      <td  class="table-light">
+                        <p>{{data_criacao | date:"d/m/Y - H:i" }}</p>
+                      </td>
+                      </tr>
+                      
                    
-                  </tr>
-                </tbody>
+                    </tbody>
+                  </table>
                 
-              </table>
               <br>
               <div class="row mx-2">
                 <h6>Texto do topico: </h6>
               </div>
-              <hr>
+              <br>
+              
+              <div class="row">
+                <div class="col">
+                    <p>Total de postagens: </p>
+                </div>
+
+                <div class="col">
+                    <p>Categoria:</p>
+                </div>
+
+                <div class="col">
+                    <p>Alunos vinculados: </p>
+                </div>
+              </div>
 
               <div class="row mx-2">
                 <h5>Respostas: </h5>
               </div>
               <br>
             <div class="row mx-2">
-                <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
-                    Responder tópico
-                  </button>  
+                <div class="col-1">
+                    <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
+                        Responder tópico
+                    </button>  
+                </div>
+               
+                <div class="col-5">
+                    <button  type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
+                        Trancar Topico
+                    </button>  
+                </div>
+            
+
+                 <!-- Listagem dos subforuns do professor -->
+
+                 
             </div>
-              
-
-
+            
             <hr>
+            {% endfor %}
             <footer>
               <p class="h6">LAIS/HUOL - UFRN - Laboratório de Inovação Tecnológica em Saúde | Av. Nilo Peçanha, 620 - 59012-300 Petrópolis - Natal/RN - Brasil </p>
               </footer>

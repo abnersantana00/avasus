@@ -125,17 +125,12 @@ def pag_inicial(request):
         subforums = list(Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao', 'autor','cod_subforum'))
         ### contar os topicos
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
-        #print(listagem_subforums)
-        #print(topicos)
-
-        #x = listagem_subforums.intersection(topicos)
-        #print(x)
+   
         listagem_subforums = []
         for titulo, descricao, autor, cod_subforum in subforums:
-            #print(cod_subforum)
+   
             for n in topicos:
                 if cod_subforum == n['cod_subforum']:
-                    #print("eh igual: ",cod_subforum, '=', n['cod_subforum'])
                     listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
             if listagem_subforums[-1][3] != cod_subforum:
                 listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
@@ -145,18 +140,7 @@ def pag_inicial(request):
                 
 
 
-            # se ja ta listado não liste, se não então pode listar É AQUI QUE TEM QUE MUDAR O BAGULHO
-            #listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
-            #listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))    
-            #print(cod_subforum, '=', n1['cod_subforum'])
     
-        
-           
-
-      
-       
-        
-
         context = {
             'cpf' : str(cpf),
             'nome' : str(nome),
@@ -173,8 +157,13 @@ def pag_inicial(request):
     
     
 def post_subforum(request, cod_subforum):
+    topicos = Topico.objects.filter(cod_subforum=cod_subforum).values_list('cod_topico', 'autor', 'titulo', 'descricao', 'data_criacao', 'estado')
+    print(topicos)
     if request.user.is_authenticated == True:
+
         context = {
-        'cod_subforum': 1
+        'cod_subforum': cod_subforum,
+        'topicos' : topicos
         }
+
         return render(request, "subforum.html", context)
