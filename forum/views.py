@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CustomUser, Subforum, Categoria, Topico
+from .models import CustomUser, Subforum, Categoria, Topico, Resposta
 from .manager import *
 from django.contrib.auth import *
 #from avasus.validacoes import validaData (insira a biblioteca para validar a data )
@@ -188,17 +188,14 @@ def post_subforum(request, cod_subforum):
         
             cod_topico = request.POST.get('cod_topico')
             texto_resposta = request.POST.get('texto_resposta')
-            data_criacao = datetime.datetime.now()
-            print("resposta log: ")
-            print(cod_topico, _autor, _nome, texto_resposta, data_criacao )
+        
+            _cod_topico = Topico.objects.filter(cod_topico=cod_topico)
 
-
-            #Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
-            #messages.success(
-            #            request, 'Topico criado com sucesso!')
-
+            
             try:
-                ...
+                Resposta.objects.get_or_create(cod_topico =_cod_topico[0], autor= _autor[0], nome_autor=_nome, texto=texto_resposta, data_criacao=datetime.datetime.now())
+                messages.success(
+                        request, 'Topico criado com sucesso!')
             except:
                 messages.error(
                         request, 'Algo deu errado')
@@ -211,12 +208,16 @@ def post_subforum(request, cod_subforum):
             
         
         
+        total_respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
+        for i in total_respostas:
+            print(i)
 
         context = {
             'cod_subforum': cod_subforum,
             'topicos' : topicos,
             'categoria': categoria[0][0],
             'total_postagens' : total_postagens,
+            'total_respostas' : total_respostas,
             }
 
         return render(request, "subforum.html", context)
