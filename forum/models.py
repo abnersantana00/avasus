@@ -33,7 +33,9 @@ class Categoria(models.Model):
 class Subforum(models.Model):
     cod_subforum = models.AutoField(primary_key=True)
     autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    nome_autor = models.CharField(max_length=50, default=' ')
     cat_subforum = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    nome_social = models.CharField(max_length=50, default=' ')
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=timezone.now)
@@ -51,7 +53,8 @@ class Topico(models.Model):
     cod_topico = models.AutoField(primary_key=True)
     cod_subforum = models.ForeignKey(Subforum, on_delete=models.CASCADE)
     autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    nome_autor = models.CharField(max_length=50, default=' ')
+    nome_social = models.CharField(max_length=50, default=' ')
     titulo = models.CharField(max_length=120, default=' ')
     descricao = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=timezone.now)
@@ -74,5 +77,7 @@ class AlunosVinculados(models.Model):
 class Resposta(models.Model):
     cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
     autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    nome_autor = models.CharField(max_length=50, default=' ')
+    nome_social = models.CharField(max_length=50, default=' ')
     texto = models.CharField(max_length=512, default=' ')
     data_criacao = models.DateTimeField(default=timezone.now)
