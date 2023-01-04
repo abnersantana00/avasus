@@ -160,14 +160,16 @@
                 <h5>Respostas: </h5>
               </div>
               <br>
-              <h1>{{cod_topico}}</h1>
+              
             <div class="row mx-2">
                 <div class="col-1">
                   <!-- Responder Topico-->
-                  <a href="#myModal2" class="btn btn-info"  data-toggle="modal">Responder Topico MD</a>
-
+                  <a href="#myModal{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Responder Topico MD</a>
+               
                   <!-- Modal -->
-      <div id="myModal2" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                
+      <div id="myModal{{cod_topico}}" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -181,10 +183,10 @@
            
             <form method="post">
               {%csrf_token%}
-
+          
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-default">Autor</span> {{cod_topico}}
+                  <span class="input-group-text" id="inputGroup-sizing-default">Autor</span> 
                 </div>
                 <input type="text" class="form-control" aria-label="readonly input example" readonly aria-describedby="inputGroup-sizing-default" value={{autor}}>
               </div>
