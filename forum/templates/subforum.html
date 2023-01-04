@@ -115,6 +115,7 @@
                  
                   {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         
                   <table class="table   table-hover">
+                    
                     <thead class="table-light" >
                       <tr>
                         <td class="table-secondary" ><b>Titulo </b></td>
@@ -147,7 +148,7 @@
                    
                     </tbody>
                   </table>
-                
+                 
                   <div class="row mx-2">
                     <h6 class="mx-4"> Texto:  </h6> 
                     <p> {{descricao}}</p>
@@ -159,6 +160,7 @@
                 <h5>Respostas: </h5>
               </div>
               <br>
+              <h1>{{cod_topico}}</h1>
             <div class="row mx-2">
                 <div class="col-1">
                   <!-- Responder Topico-->
@@ -169,23 +171,33 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">RESAPOSDAJ</h5>
+              <h5 class="modal-title" id="exampleModalLongTitle">Responder Topico</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
             <!-- Formulario cadastrar novo subforum-->
-      
+           
             <form method="post">
               {%csrf_token%}
-              <div class="form-group">
-                <input type="text" class="form-control"  placeholder="Titulo do topico (Máx 120 caracteres)"  maxlength="120" name="titulo_topico">
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">Autor</span> {{cod_topico}}
+                </div>
+                <input type="text" class="form-control" aria-label="readonly input example" readonly aria-describedby="inputGroup-sizing-default" value={{autor}}>
               </div>
               <div class="form-group">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Texto do topico " name="descricao_topico"></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Texto da Resposta " name="texto_resposta"></textarea>
+                <input type="hidden" name="cod_topico" value={{cod_topico}}>
               </div>
+
               </div>
+            
+                
+             
+             
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               <button type="submit" class="btn btn-success">Salvar</button>

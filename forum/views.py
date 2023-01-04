@@ -175,9 +175,27 @@ def post_subforum(request, cod_subforum):
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
 
-            Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
-            messages.success(
-                        request, 'Topico criado com sucesso!')
+            
+
+            try:
+                Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
+                messages.success( request, 'Topico criado com sucesso!')
+            except:
+                messages.error(
+                        request, 'Algo deu errado')
+            
+             # Receber resposta
+        
+            cod_topico = request.POST.get('cod_topico')
+            texto_resposta = request.POST.get('texto_resposta')
+            data_criacao = datetime.datetime.now()
+            print("resposta log: ")
+            print(cod_topico, _autor, _nome, texto_resposta, data_criacao )
+
+
+            #Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
+            #messages.success(
+            #            request, 'Topico criado com sucesso!')
 
             try:
                 ...
@@ -186,8 +204,10 @@ def post_subforum(request, cod_subforum):
                         request, 'Algo deu errado')
 
             return redirect('/'+str(cod_subforum))
-            
 
+       
+
+         
             
         
         
