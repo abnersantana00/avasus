@@ -157,36 +157,47 @@ def pag_inicial(request):
     
     
 def post_subforum(request, cod_subforum):
-    topicos = Topico.objects.filter(cod_subforum=cod_subforum).values_list('cod_topico', 'nome_autor', 'titulo', 'descricao', 'data_criacao', 'estado')
-    cod_categoria = Subforum.objects.filter(cod_subforum=cod_subforum).values_list('cat_subforum')
-    categoria = Categoria.objects.filter(id=cod_categoria[0][0]).values_list('nome')
-    # criar novo topico
-    if request.method == 'POST':
-        titulo = request.POST.get('titulo_topico')
-        descricao = request.POST.get('descricao_topico')
+    if request.user.is_authenticated == True:
+        topicos = Topico.objects.filter(cod_subforum=cod_subforum).values_list('cod_topico', 'nome_autor', 'titulo', 'descricao', 'data_criacao', 'estado').order_by('-data_criacao')
+        cod_categoria = Subforum.objects.filter(cod_subforum=cod_subforum).values_list('cat_subforum')
+        categoria = Categoria.objects.filter(id=cod_categoria[0][0]).values_list('nome')
+        total_postagens = len(topicos)
+        # criar novo topico
+        if request.method == 'POST':
+            titulo = request.POST.get('titulo_topico')
+            descricao = request.POST.get('descricao_topico')
 
-        try:
             _cod_subforum = Subforum.objects.filter(cod_subforum=cod_subforum)
             _cpf = CustomUser.objects.filter(cpf=request.user.cpf)
-            _nome = CustomUser.objects.filter(nome_completo=request.user.nome_completo)
-            _nome_social = CustomUser.objects.filter(nome_completo=request.user.nome_social)
+            _autor = CustomUser.objects.filter(cpf=request.user.cpf)
 
+            _nome = request.user.nome_social
+            if len(_nome) < 2:
+                _nome = request.user.nome_completo
 
-            Topico.objects.get_or_create(cod_subforum =_cod_subforum, autor =request.user.cpf, nome_autor=  , descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
+            Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
             messages.success(
-                    request, 'Topico criado com sucesso!')
-        except:
-            messages.error(
-                    request, 'Algo deu errado')
+                        request, 'Topico criado com sucesso!')
 
-        print(titulo, descricao)
-    
-    if request.user.is_authenticated == True:
+            try:
+                ...
+            except:
+                messages.error(
+                        request, 'Algo deu errado')
+
+            return redirect('/'+str(cod_subforum))
+            
+
+            
+        
+        
 
         context = {
-        'cod_subforum': cod_subforum,
-        'topicos' : topicos,
-        'categoria': categoria[0][0]
-        }
+            'cod_subforum': cod_subforum,
+            'topicos' : topicos,
+            'categoria': categoria[0][0],
+            'total_postagens' : total_postagens,
+            }
 
         return render(request, "subforum.html", context)
+        

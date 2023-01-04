@@ -44,12 +44,11 @@
                       
       <!-- Button trigger modal -->
       <br>
-      <button  type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
-        Criar tópico
-      </button>
-     
+
+      <a href="#myModal" class="btn btn-success btn-lg"  data-toggle="modal">Criar Topico</a>
+
       <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div id="myModal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -73,7 +72,6 @@
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               <button type="submit" class="btn btn-success">Salvar</button>
-      
             </form>
             </div>
           </div>
@@ -95,7 +93,22 @@
                 <div class="card-header h5">
                     Subforum - Listagem de topicos
                   </div>
+
+          
                   <br>
+                  <div class="row">
+                    <div class="col">
+                        <h6>Postagens: {{total_postagens}} </h6>
+                    </div>
+    
+                    <div class="col">
+                        <h6>Categoria: {{categoria}}</h6>
+                    </div>
+    
+                    <div class="col">
+                        <h6>Alunos vinculados: </h6>
+                    </div>
+                  </div>
                   <hr>
                   
        
@@ -106,6 +119,7 @@
                       <tr>
                         <td class="table-secondary" ><b>Titulo </b></td>
                         <td class="table-secondary" ><b>Autor</b></td>
+                        <td class="table-secondary" ><b>Qtd. Respostas</b></td>
                         <td class="table-secondary" ><b>Criado em</b></td>
                         <td class="table-secondary" ><b>Ultima Postagem</b></td>
                       </tr>
@@ -113,10 +127,15 @@
                     <tbody>
                       
                       <tr>
-                      <td  class="table-light" >  <h6>{{titulo}}</h6> </td>
+                      <td  class="table-light" >  {{titulo}} </td>
                       <td  class="table-light" >
                           <p> {{autor}}</p> 
                       </td>
+
+                      <td  class="table-light" >
+                        <p> ### </p> 
+                    </td>
+
                       <td  class="table-light">
                           <p>{{data_criacao | date:"d/m/Y - H:i" }}</p>
                       </td>
@@ -129,26 +148,12 @@
                     </tbody>
                   </table>
                 
+                  <div class="row mx-2">
+                    <h6 class="mx-4"> Texto:  </h6> 
+                    <p> {{descricao}}</p>
+                  </div>
+                  <br>
               
-              <div class="row mx-2">
-                <h6 class="mx-4"> Texto:  </h6> 
-                <p> {{descricao}}</p>
-              </div>
-              <br>
-              
-              <div class="row">
-                <div class="col">
-                    <p>Total de postagens: </p>
-                </div>
-
-                <div class="col">
-                    <p>Categoria: {{categoria}}</p>
-                </div>
-
-                <div class="col">
-                    <p>Alunos vinculados: </p>
-                </div>
-              </div>
 
               <div class="row mx-2">
                 <h5>Respostas: </h5>
@@ -156,6 +161,41 @@
               <br>
             <div class="row mx-2">
                 <div class="col-1">
+                  <!-- Responder Topico-->
+                  <a href="#myModal2" class="btn btn-info"  data-toggle="modal">Responder Topico MD</a>
+
+                  <!-- Modal -->
+      <div id="myModal2" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">RESAPOSDAJ</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            <!-- Formulario cadastrar novo subforum-->
+      
+            <form method="post">
+              {%csrf_token%}
+              <div class="form-group">
+                <input type="text" class="form-control"  placeholder="Titulo do topico (Máx 120 caracteres)"  maxlength="120" name="titulo_topico">
+              </div>
+              <div class="form-group">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Texto do topico " name="descricao_topico"></textarea>
+              </div>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success">Salvar</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
                     <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
                         Responder tópico
                     </button>  
@@ -174,8 +214,11 @@
             </div>
             
             <hr>
+            <br>
             {% endfor %}
             <footer>
+              <br>
+              <hr>
               <p class="h6">LAIS/HUOL - UFRN - Laboratório de Inovação Tecnológica em Saúde | Av. Nilo Peçanha, 620 - 59012-300 Petrópolis - Natal/RN - Brasil </p>
               </footer>
            
