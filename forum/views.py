@@ -15,7 +15,7 @@ from django.contrib.auth import login as authlogin, logout
 import datetime
 from django.utils import timezone
 from .manager import *
-from django.db.models import Count
+from django.db.models import Count, Max, Min
 
 from time import time
 import calendar
@@ -210,6 +210,11 @@ def post_subforum(request, cod_subforum):
         
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
         
+        qtd_respostas = Resposta.objects.values_list('cod_topico').annotate(dcount=Count('cod_topico'))
+        
+        ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
+
+        
 
         context = {
             'cod_subforum': cod_subforum,
@@ -217,6 +222,8 @@ def post_subforum(request, cod_subforum):
             'categoria': categoria[0][0],
             'total_postagens' : total_postagens,
             'respostas' : respostas,
+            'qtd_respostas' : qtd_respostas,
+            'ultima_postagem' : ultima_postagem
             }
 
         return render(request, "subforum.html", context)

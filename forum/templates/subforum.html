@@ -112,10 +112,6 @@
                         <h6>Alunos vinculados: </h6>
                     </div>
                   </div>
-               
-                  
-       
-                 
                   {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         
                   <br>
                   <h4>Topico {{cod_topico}}</h4>
@@ -140,14 +136,28 @@
                       </td>
 
                       <td  class="table-light" >
-                        <p> ### </p> 
+                        
+                           {% for cod_tp, qtd_respostas in qtd_respostas %}
+                              {% if cod_tp == cod_topico %}
+                                <p> {{qtd_respostas}} </p> 
+                              {% endif %}
+                           {% endfor %}
+                      
                     </td>
 
                       <td  class="table-light">
                           <p>{{data_criacao | date:"d/m/Y - H:i" }}</p>
+                      
                       </td>
                       <td  class="table-light">
-                        <p>{{data_criacao | date:"d/m/Y - H:i" }}</p>
+                          
+                        {% for a, b in ultima_postagem %}
+                          {% if a ==  cod_topico %}
+                              <p> {{b | date:"d/m/Y - H:i"}}</p>
+                          {% endif %}  
+                      {%endfor%}
+
+                        
                       </td>
                       </tr>
                       
