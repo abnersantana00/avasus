@@ -208,8 +208,8 @@ def post_subforum(request, cod_subforum):
             
         
         
-        total_respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
-        for i in total_respostas:
+        respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
+        for i in respostas:
             print(i)
 
         context = {
@@ -217,7 +217,7 @@ def post_subforum(request, cod_subforum):
             'topicos' : topicos,
             'categoria': categoria[0][0],
             'total_postagens' : total_postagens,
-            'total_respostas' : total_respostas,
+            'respostas' : respostas,
             }
 
         return render(request, "subforum.html", context)

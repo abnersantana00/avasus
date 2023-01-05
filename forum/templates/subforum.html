@@ -14,6 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
+
   <!------ Include the above in your HEAD tag ---------->
   </head>
   <body>      
@@ -60,6 +61,8 @@
             <div class="modal-body">
             <!-- Formulario cadastrar novo subforum-->
       
+  
+
             <form method="post">
               {%csrf_token%}
               <div class="form-group">
@@ -158,9 +161,42 @@
 
               <div class="row mx-2">
                 <h5>Respostas: </h5>
+                
               </div>
               <br>
-          
+           
+              <table class="table table-hover">
+                    
+                <thead class="table-light" >
+                  <tr>
+                    <td class="table-secondary" ><b>Texto </b></td>
+                    <td class="table-secondary" ><b>Autor</b></td>
+                    <td class="table-secondary" ><b>Postado em</b></td>
+                  </tr>
+                </thead>  
+                <tbody>
+                
+                 
+               
+              {% for a, b , nome_autor_resp, texto_resp ,postado_em_resp in respostas %}
+                {% if a ==  cod_topico %}
+                     <tr>
+                      <td  class="table-light" >  {{texto_resp}} </td>
+                      <td  class="table-light" >
+                          <p> {{nome_autor_resp}}</p> 
+                      </td>
+  
+                      <td  class="table-light" >
+                        <p> {{postado_em_resp}}</p> 
+                      </td>
+                    </tr>
+                      
+                {% endif %}
+                
+              {%endfor%}
+            </tbody>     
+            </table>
+
             <div class="row mx-2">
                 <div class="col-1">
                   <!-- Responder Topico-->
@@ -225,7 +261,11 @@
                  
             </div>
             
+            
+            <br>
+            <br>
             <hr>
+            <br>
             <br>
             {% endfor %}
             <footer>
