@@ -209,8 +209,7 @@ def post_subforum(request, cod_subforum):
         
         
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
-        for i in respostas:
-            print(i)
+        
 
         context = {
             'cod_subforum': cod_subforum,

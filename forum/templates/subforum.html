@@ -112,11 +112,14 @@
                         <h6>Alunos vinculados: </h6>
                     </div>
                   </div>
-                  <hr>
+               
                   
        
                  
                   {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         
+                  <br>
+                  <h4>Topico {{cod_topico}}</h4>
+                  <br>
                   <table class="table   table-hover">
                     
                     <thead class="table-light" >
@@ -156,45 +159,41 @@
                     <h6 class="mx-4"> Texto:  </h6> 
                     <p> {{descricao}}</p>
                   </div>
-                  <br>
+                  
               
 
               <div class="row mx-2">
-                <h5>Respostas: </h5>
-                
+                <h6>Respostas: </h6>
               </div>
-              <br>
+              
            
-              <table class="table table-hover ">
-                    
-                <thead class="table-light" >
+              <table class="table table-striped table-hover">
+                <thead>
                   <tr>
-                    <td class="table-secondary" ><b>Texto </b></td>
-                    <td class="table-secondary" ><b>Autor</b></td>
-                    <td class="table-secondary" ><b>Postado em</b></td>
+                    <td><b>Texto </b></td>
+                    <td><b>Autor</b></td>
+                    <td><b>Postado em</b></td>
                   </tr>
                 </thead>  
                 <tbody>
-                
-                 
-               
+      
               {% for a, b , nome_autor_resp, texto_resp ,postado_em_resp in respostas %}
                 {% if a ==  cod_topico %}
                      <tr>
-                      <td  class="table-light" >  {{texto_resp}} </td>
-                      <td  class="table-light" >
+                      <td >  {{texto_resp}} </td>
+                      <td >
                           <p> {{nome_autor_resp}}</p> 
                       </td>
   
-                      <td  class="table-light" >
+                      <td  >
                         <p> {{postado_em_resp | date:"d/m/Y - H:i"}}</p> 
                       </td>
                     </tr>
                       
                 {% endif %}
-                
+             
               {%endfor%}
-            </tbody>     
+            </tbody> 
             </table>
 
             <div class="row mx-2">
@@ -264,7 +263,7 @@
             
             <br>
             <br>
-            <hr>
+           
             <br>
             <br>
             {% endfor %}
