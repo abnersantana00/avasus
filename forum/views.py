@@ -166,10 +166,14 @@ def post_subforum(request, cod_subforum):
         if request.method == 'POST':
             titulo = request.POST.get('titulo_topico')
             descricao = request.POST.get('descricao_topico')
-
             _cod_subforum = Subforum.objects.filter(cod_subforum=cod_subforum)
             _cpf = CustomUser.objects.filter(cpf=request.user.cpf)
             _autor = CustomUser.objects.filter(cpf=request.user.cpf)
+            cod_topico = request.POST.get('cod_topico')
+            trancar_topico = request.POST.get('trancar_topico')
+            texto_resposta = request.POST.get('texto_resposta')
+
+            
 
             _nome = request.user.nome_social
             if len(_nome) < 2:
@@ -186,10 +190,11 @@ def post_subforum(request, cod_subforum):
             
              # Receber resposta
         
-            cod_topico = request.POST.get('cod_topico')
-            texto_resposta = request.POST.get('texto_resposta')
+            
         
             _cod_topico = Topico.objects.filter(cod_topico=cod_topico)
+           
+            
 
             
             try:
@@ -200,7 +205,22 @@ def post_subforum(request, cod_subforum):
                 messages.error(
                         request, 'Algo deu errado')
 
+            # Trancar tópico
+            
+      
+            #print(cod_topico)
+            #print(cod_topico[0])
+           
+            if trancar_topico == 'sim':
+                try:
+                    _cod_topico.update(estado="TRC")
+                except:
+                    ...
+           
+
             return redirect('/'+str(cod_subforum))
+
+            
 
        
 
@@ -225,6 +245,8 @@ def post_subforum(request, cod_subforum):
             'qtd_respostas' : qtd_respostas,
             'ultima_postagem' : ultima_postagem
             }
+
+           
 
         return render(request, "subforum.html", context)
         

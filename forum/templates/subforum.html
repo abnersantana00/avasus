@@ -209,8 +209,8 @@
             <div class="row mx-2">
                 <div class="col-1">
                   <!-- Responder Topico-->
-                  <a href="#myModal{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Responder Topico MD</a>
-               
+                  <a href="#myModal{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Responder Topico</a>
+             
                   <!-- Modal -->
                 
       <div id="myModal{{cod_topico}}" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -263,7 +263,53 @@
                         Trancar Topico
                     </button>  
                 </div>
-            
+                
+                <div class="col-5">
+                  <a href="#Trancar{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Trancar Topico</a>
+              </div>
+
+
+              <div id="Trancar{{cod_topico}}" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle"> Tem certeza que quer trancar o topico {{cod_topico}} ? </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- Formulario cadastrar novo subforum-->
+                   
+                    <form method="post">
+                      {%csrf_token%}
+                  
+                      <div class="input-group mb-3">
+                        
+                        <div class="alert alert-danger" role="alert">
+                          Ao trancar ninguém poderá responder este topico!
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <input type="hidden" name="cod_topico" value={{cod_topico}}>
+                        <input type="hidden" name="trancar_topico" value='sim'>
+
+                      </div>
+        
+                      </div>
+                    
+                        
+                     
+                     
+                      <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                      <button type="submit" class="btn btn-danger">Sim</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
                  <!-- Listagem dos subforuns do professor -->
 
