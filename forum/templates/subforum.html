@@ -114,7 +114,12 @@
                   </div>
                   {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         
                   <br>
-                  <h4>Topico {{cod_topico}}</h4>
+                  <h4>Topico {{cod_topico}}
+                   
+                  {% if estado == 'TRC'%}
+                      <h4 class="text-danger">[TRANCADO]</h4>
+                  {%endif%}
+                  </h4>
                   <br>
                   <table class="table   table-hover">
                     
@@ -209,7 +214,11 @@
             <div class="row mx-2">
                 <div class="col-1">
                   <!-- Responder Topico-->
+                  
+                  {% if estado == 'Ativado'%}
                   <a href="#myModal{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Responder Topico</a>
+                  {%endif%}
+                  
              
                   <!-- Modal -->
                 
@@ -243,8 +252,6 @@
               </div>
             
                 
-             
-             
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               <button type="submit" class="btn btn-success">Salvar</button>
@@ -254,20 +261,20 @@
         </div>
       </div>
 
-
+    
                     
                 </div>
-               
-                <div class="col-5">
-                    <button  type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenter" {{bloquear}}>
-                        Trancar Topico
-                    </button>  
-                </div>
-                
-                <div class="col-5">
-                  <a href="#Trancar{{cod_topico}}" class="btn btn-info"  data-toggle="modal">Trancar Topico</a>
-              </div>
 
+            
+                
+
+                <div class="col">
+                  {% if estado == 'Ativado'%}
+                  <a href="#Trancar{{cod_topico}}" class="btn btn-danger"  data-toggle="modal">Trancar Topico</a>
+                  {% endif %}
+              </div>
+              
+           
 
               <div id="Trancar{{cod_topico}}" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         
