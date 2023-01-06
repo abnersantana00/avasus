@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -16,7 +15,6 @@ import datetime
 from django.utils import timezone
 from .manager import *
 from django.db.models import Count, Max, Min
-
 from time import time
 import calendar
 # Create your views here.
@@ -106,41 +104,25 @@ def pag_inicial(request):
             categoria = request.POST.get('categoria')
         # salvar no banco o subforum criado pelo professor
             cat_select = Categoria.objects.filter(id=categoria[0])
-            
-            
             try:
-                Subforum.objects.get_or_create(autor = _cpf[0], cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
+                Subforum.objects.get_or_create(autor = _cpf[0], nome_autor=str(nome), nome_social = request.user.nome_social, cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
                 messages.success(
                     request, 'Cadastro realizado com sucesso!')
             except:
                
                 messages.error(
                     request, 'Algo deu errado')
-       
-        
-        
-      
         subforuns_assoc = len(Subforum.objects.filter(autor=_cpf[0]))
-
         subforums = list(Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao', 'nome_autor','cod_subforum', 'nome_autor'))
         ### contar os topicos
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
-   
         listagem_subforums = []
         for titulo, descricao, autor, cod_subforum, nome_autor in subforums:
-   
             for n in topicos:
                 if cod_subforum == n['cod_subforum']:
                     listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
             if listagem_subforums[-1][3] != cod_subforum:
                 listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
-            
-            
-            
-                
-
-
-    
         context = {
             'cpf' : str(cpf),
             'nome' : str(nome),
@@ -172,15 +154,9 @@ def post_subforum(request, cod_subforum):
             cod_topico = request.POST.get('cod_topico')
             trancar_topico = request.POST.get('trancar_topico')
             texto_resposta = request.POST.get('texto_resposta')
-
-            
-
             _nome = request.user.nome_social
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
-
-            
-
             try:
                 Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
                 messages.success( request, 'Topico criado com sucesso!')
@@ -189,53 +165,25 @@ def post_subforum(request, cod_subforum):
                         request, 'Algo deu errado')
             
              # Receber resposta
-        
-            
-        
             _cod_topico = Topico.objects.filter(cod_topico=cod_topico)
-           
-            
-
-            
             try:
-                Resposta.objects.get_or_create(cod_topico =_cod_topico[0], autor= _autor[0], nome_autor=_nome, texto=texto_resposta, data_criacao=datetime.datetime.now())
-                messages.success(
-                        request, 'Topico criado com sucesso!')
+                if _cod_topico.values_list('estado')[0][0] == 'Ativado':
+                    Resposta.objects.get_or_create(cod_topico =_cod_topico[0], autor= _autor[0], nome_autor=_nome, texto=texto_resposta, data_criacao=datetime.datetime.now())
+                    messages.success(
+                            request, 'Topico criado com sucesso!')
             except:
-                messages.error(
-                        request, 'Algo deu errado')
-
+                ...
             # Trancar tópico
-            
-      
-            #print(cod_topico)
-            #print(cod_topico[0])
-           
             if trancar_topico == 'sim':
                 try:
                     _cod_topico.update(estado="TRC")
                 except:
                     ...
-           
-
             return redirect('/'+str(cod_subforum))
 
-            
-
-       
-
-         
-            
-        
-        
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
-        
         qtd_respostas = Resposta.objects.values_list('cod_topico').annotate(dcount=Count('cod_topico'))
-        
         ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
-
-        
-
         context = {
             'cod_subforum': cod_subforum,
             'topicos' : topicos,
@@ -245,8 +193,5 @@ def post_subforum(request, cod_subforum):
             'qtd_respostas' : qtd_respostas,
             'ultima_postagem' : ultima_postagem
             }
-
-           
-
         return render(request, "subforum.html", context)
         
