@@ -68,11 +68,11 @@ class Topico(models.Model):
     def __str__(self):
         return self.titulo
 
-class AlunosVinculados(models.Model):
-    ...
-    #CPF
-    #nome_completo
-    #nome_social
+
+class VinculoSubforum(models.Model):
+    aluno = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    cod_subforum = models.ForeignKey(Subforum, on_delete=models.CASCADE)
+    
 
 class Resposta(models.Model):
     cod_topico = models.ForeignKey(Topico, on_delete=models.CASCADE)
