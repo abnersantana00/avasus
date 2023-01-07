@@ -121,8 +121,12 @@ def pag_inicial(request):
             for n in topicos:
                 if cod_subforum == n['cod_subforum']:
                     listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
-            if listagem_subforums[-1][3] != cod_subforum:
+            try:
+                if listagem_subforums[-1][3] != cod_subforum:
+                    listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+            except:
                 listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+            
         context = {
             'cpf' : str(cpf),
             'nome' : str(nome),
