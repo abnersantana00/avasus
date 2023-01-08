@@ -203,7 +203,9 @@ def post_subforum(request, cod_subforum):
             except:
                 ...
             # Trancar tópico
-            if trancar_topico == 'sim':
+            perfil =  CustomUser.objects.filter(cpf=request.user.cpf).values_list('perfil')
+            print(perfil[0][0])
+            if trancar_topico == 'sim'and perfil[0][0] == 'PROF':
                 try:
                     _cod_topico.update(estado="TRC")
                 except:
@@ -215,7 +217,8 @@ def post_subforum(request, cod_subforum):
             except:
                 ...
             return redirect('/'+str(cod_subforum))
-            
+
+        perfil =  CustomUser.objects.filter(cpf=request.user.cpf).values_list('perfil') 
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
         qtd_respostas = Resposta.objects.values_list('cod_topico').annotate(dcount=Count('cod_topico'))
         ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
@@ -237,7 +240,8 @@ def post_subforum(request, cod_subforum):
             'respostas' : respostas,
             'qtd_respostas' : qtd_respostas,
             'ultima_postagem' : ultima_postagem,
-            'usuarios' : usuarios
+            'usuarios' : usuarios,
+            'perfil' : perfil[0][0]
             }
         return render(request, "subforum.html", context)
         

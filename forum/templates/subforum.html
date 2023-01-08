@@ -295,18 +295,13 @@
             </div>
           </div>
         </div>
-      </div>
-
-    
-                    
+      </div> 
                 </div>
-
-            
-                
-
                 <div class="col">
                   {% if estado == 'Ativado'%}
-                  <a href="#Trancar{{cod_topico}}" class="btn btn-danger"  data-toggle="modal">Trancar Topico</a>
+                  {% if perfil == 'PROF'%}
+                     <a href="#Trancar{{cod_topico}}" class="btn btn-danger"  data-toggle="modal">Trancar Topico</a>
+                  {% endif %}
                   {% endif %}
               </div>
               
