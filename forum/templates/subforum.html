@@ -92,20 +92,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-
-                
-                 
-
-                  
-
-              
-             
               </div>
               <div class="modal-body">
               <!-- Formulario cadastrar novo subforum-->
-        
-    
-  
               <form method="post">
                 {%csrf_token%}
                 <h6> Selecione o aluno que deseja vincular a este subforum </h6>
@@ -113,10 +102,10 @@
 
                   <div class="form-group">
                     <br><br>
-                    <select class="form-control" id="exampleFormControlSelect1">
+                    <select class="form-control" name="cpf_vinculo" id="exampleFormControlSelect1">
                       <option disabled selected> Escolha um aluno para vincular </option>
-                      {% for a , b in usuarios %}
-                        <option   name="{{ a }}" value="{{ b }}"> {{ a }} - {{ b }}
+                      {% for cpf , nome_social in usuarios %}
+                        <option    value="{{ cpf }}"> {{ cpf }} - {{ nome_social }}
                         </option>    
                       {% endfor %}
                     </select>

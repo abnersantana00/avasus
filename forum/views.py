@@ -158,6 +158,10 @@ def post_subforum(request, cod_subforum):
             trancar_topico = request.POST.get('trancar_topico')
             texto_resposta = request.POST.get('texto_resposta')
             _nome = request.user.nome_social
+            cpf_vinculo = request.POST.get('cpf_vinculo')
+
+            
+
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
             try:
@@ -181,7 +185,9 @@ def post_subforum(request, cod_subforum):
                     _cod_topico.update(estado="TRC")
                 except:
                     ...
+            print('cpf recebido eh', cpf_vinculo)
             return redirect('/'+str(cod_subforum))
+            
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
         qtd_respostas = Resposta.objects.values_list('cod_topico').annotate(dcount=Count('cod_topico'))
         ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
@@ -191,8 +197,9 @@ def post_subforum(request, cod_subforum):
             for i in range(len(alunos_vinculados)):
                 if cod_subforum == str(alunos_vinculados[i][1]):
                     alunos_vinc_subforum = alunos_vinc_subforum+1
-
-        print(usuarios)   
+        
+           
+        
         context = {
             'cod_subforum': cod_subforum,
             'alunos_vinc_subforum' : alunos_vinc_subforum,
