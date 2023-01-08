@@ -165,7 +165,7 @@ def post_subforum(request, cod_subforum):
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
             try:
-                Topico.objects.get_or_create(cod_subforum =_cod_subforum[0], titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
+                Topico.objects.get_or_create(cod_subforum =_cod_subforum, titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
                 messages.success( request, 'Topico criado com sucesso!')
             except:
                 messages.error(
@@ -185,7 +185,11 @@ def post_subforum(request, cod_subforum):
                     _cod_topico.update(estado="TRC")
                 except:
                     ...
-            print('cpf recebido eh', cpf_vinculo)
+
+            aluno_vinculado = CustomUser.objects.filter(cpf=cpf_vinculo)
+            
+            VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= aluno_vinculado[0]) 
+          
             return redirect('/'+str(cod_subforum))
             
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
