@@ -212,10 +212,11 @@ def post_subforum(request, cod_subforum):
                     ...
 
             aluno_vinculado = CustomUser.objects.filter(cpf=cpf_vinculo)
-            try:
-                VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= aluno_vinculado[0]) 
-            except:
-                ...
+            if perfil[0][0] == 'PROF':
+                try:
+                    VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= aluno_vinculado[0]) 
+                except:
+                    ...
             return redirect('/'+str(cod_subforum))
 
         perfil =  CustomUser.objects.filter(cpf=request.user.cpf).values_list('perfil') 

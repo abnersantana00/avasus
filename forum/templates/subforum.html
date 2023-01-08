@@ -47,7 +47,9 @@
       <br>
 
       <a href="#myModal" class="btn btn-success btn-lg"  data-toggle="modal">Criar Topico</a>
+      {% if perfil == 'PROF'%}
       <a href="#myModal2" class="btn btn-primary btn-lg"  data-toggle="modal">Vincular aluno</a>
+      {% endif %}
 
       <!-- Modal -->
       <div id="myModal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
