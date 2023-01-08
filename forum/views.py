@@ -118,7 +118,6 @@ def pag_inicial(request):
 
 
 
-        ### contar os topicos
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
         listagem_subforums = []
         for titulo, descricao, autor, cod_subforum, nome_autor in subforums:
