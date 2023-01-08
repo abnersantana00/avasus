@@ -110,20 +110,30 @@ def pag_inicial(request):
                
                 messages.error(
                     request, 'Algo deu errado')
-        subforuns_assoc = len(Subforum.objects.filter(autor=_cpf[0]))
-        subforums = list(Subforum.objects.filter(autor_id=_cpf[0]).values_list('titulo','descricao', 'nome_autor','cod_subforum', 'nome_autor'))
+       
+        subforuns_assoc = len(VinculoSubforum.objects.filter(aluno=_cpf[0]))
+        vinculo_subforum =VinculoSubforum.objects.values_list('aluno', 'cod_subforum').filter(aluno=_cpf[0])
+        subforums = list(Subforum.objects.values_list('titulo','descricao', 'nome_autor','cod_subforum', 'nome_autor') )
+
+
+
+
         ### contar os topicos
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
         listagem_subforums = []
         for titulo, descricao, autor, cod_subforum, nome_autor in subforums:
-            for n in topicos:
-                if cod_subforum == n['cod_subforum']:
-                    listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
-            try:
-                if listagem_subforums[-1][3] != cod_subforum:
-                    listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
-            except:
-                listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+            for cod_vinc in vinculo_subforum:
+                if cod_subforum == cod_vinc[1]:
+                    for n in topicos:
+                        
+                        if cod_subforum == n['cod_subforum']:
+                            listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
+                    
+                    try:
+                        if listagem_subforums[-1][3] != cod_subforum:
+                            listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
+                    except:
+                        listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
             
         context = {
             'cpf' : str(cpf),
@@ -164,8 +174,10 @@ def post_subforum(request, cod_subforum):
 
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
+
+            
             try:
-                Topico.objects.get_or_create(cod_subforum =_cod_subforum, titulo=titulo, autor= _autor[0], nome_autor=_nome, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
+                Topico.objects.create(cod_subforum =_cod_subforum[0], autor= _autor[0], nome_autor=_nome, titulo=titulo, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
                 messages.success( request, 'Topico criado com sucesso!')
             except:
                 messages.error(
@@ -187,9 +199,10 @@ def post_subforum(request, cod_subforum):
                     ...
 
             aluno_vinculado = CustomUser.objects.filter(cpf=cpf_vinculo)
-            
-            VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= aluno_vinculado[0]) 
-          
+            try:
+                VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= aluno_vinculado[0]) 
+            except:
+                ...
             return redirect('/'+str(cod_subforum))
             
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
