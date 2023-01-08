@@ -102,27 +102,39 @@ def pag_inicial(request):
             categoria = request.POST.get('categoria')
         # salvar no banco o subforum criado pelo professor
             cat_select = Categoria.objects.filter(id=categoria[0])
+           
+           
             try:
                 Subforum.objects.get_or_create(autor = _cpf[0], nome_autor=str(nome), nome_social = request.user.nome_social, cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
+                # criar um vinculo na tabela de vinculos
                 messages.success(
                     request, 'Cadastro realizado com sucesso!')
+                return redirect('pag-inicial')
             except:
                
-                messages.error(
-                    request, 'Algo deu errado')
+                Subforum.objects.get_or_create(autor = _cpf[0], nome_autor=str(nome), nome_social = request.user.nome_social, cat_subforum =cat_select[0]  ,titulo=titulo, descricao=desc, data_criacao=datetime.date.today(), estado='Ativado' )
+                # criar um vinculo na tabela de vinculos
+
+                usuario_vinculado = CustomUser.objects.filter(cpf=request.user.cpf)
+                _cod_subforum = Subforum.objects.filter(cod_subforum=cod_subforum)
+                VinculoSubforum.objects.get_or_create(cod_subforum=_cod_subforum[0], aluno= usuario_vinculado[0]) 
+                messages.success(
+                    request, 'Cadastro realizado com sucesso!')
+                return redirect('pag-inicial')
        
         subforuns_assoc = len(VinculoSubforum.objects.filter(aluno=_cpf[0]))
         vinculo_subforum =VinculoSubforum.objects.values_list('aluno', 'cod_subforum').filter(aluno=_cpf[0])
-        subforums = list(Subforum.objects.values_list('titulo','descricao', 'nome_autor','cod_subforum', 'nome_autor') )
+        subforums = list(Subforum.objects.values_list('titulo','descricao', 'nome_autor','cod_subforum', 'autor_id') )
 
 
 
 
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
         listagem_subforums = []
-        for titulo, descricao, autor, cod_subforum, nome_autor in subforums:
+        for titulo, descricao, autor, cod_subforum, autor_id in subforums:
+            print(autor, autor_id)
             for cod_vinc in vinculo_subforum:
-                if cod_subforum == cod_vinc[1]:
+                if cod_subforum == cod_vinc[1] or str(autor_id) == str(request.user.cpf):
                     for n in topicos:
                         
                         if cod_subforum == n['cod_subforum']:
