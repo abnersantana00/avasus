@@ -47,6 +47,7 @@
       <br>
 
       <a href="#myModal" class="btn btn-success btn-lg"  data-toggle="modal">Criar Topico</a>
+      <a href="#myModal2" class="btn btn-primary btn-lg"  data-toggle="modal">Vincular aluno</a>
 
       <!-- Modal -->
       <div id="myModal" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -80,6 +81,57 @@
           </div>
         </div>
       </div>
+
+
+        <!-- Modal -->
+        <div id="myModal2" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Vincular novo aluno a este subforum</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+
+                
+                 
+
+                  
+
+              
+             
+              </div>
+              <div class="modal-body">
+              <!-- Formulario cadastrar novo subforum-->
+        
+    
+  
+              <form method="post">
+                {%csrf_token%}
+                <h6> Selecione o aluno que deseja vincular a este subforum </h6>
+                <div class="form-group">
+
+                  <div class="form-group">
+                    <br><br>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                      <option disabled selected> Escolha um aluno para vincular </option>
+                      {% for a , b in usuarios %}
+                        <option   name="{{ a }}" value="{{ b }}"> {{ a }} - {{ b }}
+                        </option>    
+                      {% endfor %}
+                    </select>
+                    </div>
+                    <br><br>
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success">Salvar</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
    
                       <br>
                     </p>
@@ -109,7 +161,7 @@
                     </div>
     
                     <div class="col">
-                        <h6>Alunos vinculados: </h6>
+                        <h6>Alunos vinculados: {{alunos_vinc_subforum}} </h6>
                     </div>
                   </div>
                   {% for cod_topico, autor, titulo, descricao, data_criacao, estado  in topicos %}         

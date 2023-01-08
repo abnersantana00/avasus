@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CustomUser, Subforum, Categoria, Topico, Resposta
+from .models import CustomUser, Subforum, Categoria, Topico, Resposta, VinculoSubforum
 from .manager import *
 from django.contrib.auth import *
 #from avasus.validacoes import validaData (insira a biblioteca para validar a data )
@@ -14,14 +14,12 @@ from django.contrib.auth import login as authlogin, logout
 import datetime
 from django.utils import timezone
 from .manager import *
-from django.db.models import Count, Max, Min
+from django.db.models import Count, Max, Min, Sum
 from time import time
 import calendar
 # Create your views here.
-
 def cadastro(request):
     # Receber os dados
-    
     if request.method == 'POST':
         nome_completo = request.POST.get('nome_completo')
         nome_social = request.POST.get('nome_social')
@@ -144,6 +142,7 @@ def pag_inicial(request):
     
 def post_subforum(request, cod_subforum):
     if request.user.is_authenticated == True:
+        usuarios = CustomUser.objects.values_list('cpf','nome_social')
         topicos = Topico.objects.filter(cod_subforum=cod_subforum).values_list('cod_topico', 'nome_autor', 'titulo', 'descricao', 'data_criacao', 'estado').order_by('-data_criacao')
         cod_categoria = Subforum.objects.filter(cod_subforum=cod_subforum).values_list('cat_subforum')
         categoria = Categoria.objects.filter(id=cod_categoria[0][0]).values_list('nome')
@@ -167,7 +166,6 @@ def post_subforum(request, cod_subforum):
             except:
                 messages.error(
                         request, 'Algo deu errado')
-            
              # Receber resposta
             _cod_topico = Topico.objects.filter(cod_topico=cod_topico)
             try:
@@ -184,18 +182,27 @@ def post_subforum(request, cod_subforum):
                 except:
                     ...
             return redirect('/'+str(cod_subforum))
-
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
         qtd_respostas = Resposta.objects.values_list('cod_topico').annotate(dcount=Count('cod_topico'))
         ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
+        alunos_vinculados = VinculoSubforum.objects.values_list('aluno', 'cod_subforum').annotate(dcount=Count('cod_subforum')).order_by('cod_subforum')
+        alunos_vinc_subforum = 0
+        if len(alunos_vinculados)>0:
+            for i in range(len(alunos_vinculados)):
+                if cod_subforum == str(alunos_vinculados[i][1]):
+                    alunos_vinc_subforum = alunos_vinc_subforum+1
+
+        print(usuarios)   
         context = {
             'cod_subforum': cod_subforum,
+            'alunos_vinc_subforum' : alunos_vinc_subforum,
             'topicos' : topicos,
             'categoria': categoria[0][0],
             'total_postagens' : total_postagens,
             'respostas' : respostas,
             'qtd_respostas' : qtd_respostas,
-            'ultima_postagem' : ultima_postagem
+            'ultima_postagem' : ultima_postagem,
+            'usuarios' : usuarios
             }
         return render(request, "subforum.html", context)
         
