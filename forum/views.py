@@ -196,8 +196,8 @@ def post_subforum(request, cod_subforum):
                     ...
             return redirect('/'+str(cod_subforum))
         
-        # Verificar se o usuário tem acesso ao forum, se não tiver voltar pra página inicial
-
+        
+        
 
         perfil =  CustomUser.objects.filter(cpf=request.user.cpf).values_list('perfil') 
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
@@ -205,10 +205,17 @@ def post_subforum(request, cod_subforum):
         ultima_postagem = Resposta.objects.values_list('cod_topico').annotate(dcount=Max('data_criacao'))
         alunos_vinculados = VinculoSubforum.objects.values_list('aluno', 'cod_subforum').annotate(dcount=Count('cod_subforum')).order_by('cod_subforum')
         alunos_vinc_subforum = 0
+        # contar quantos alunos vinculados exitem em um subforum específico
         if len(alunos_vinculados)>0:
             for i in range(len(alunos_vinculados)):
                 if cod_subforum == str(alunos_vinculados[i][1]):
                     alunos_vinc_subforum = alunos_vinc_subforum+1
+        # não permitir que usuario acesse um subforum em que não está vinculado
+        if len(alunos_vinculados)>0:
+            for i in range(len(alunos_vinculados)):
+                if cod_subforum == str(alunos_vinculados[i][1]):
+                    if request.user.cpf not in str(alunos_vinculados[i][0]):
+                        return redirect('/')
 
         context = {
             'cod_subforum': cod_subforum,
