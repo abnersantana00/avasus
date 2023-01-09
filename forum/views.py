@@ -18,6 +18,7 @@ from django.db.models import Count, Max, Min, Sum
 from time import time
 import calendar
 # Create your views here.
+# História de Usuário  2 - Cadastro
 def cadastro(request):
     # Receber os dados
     if request.method == 'POST':
@@ -49,8 +50,6 @@ def cadastro(request):
             messages.error(request, 'Voce precisa concordar com os temos de uso!')
             salvar = False
         if salvar and True:
-            
-           
             try:
                 CustomUser.objects.create_user(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade, password=senha1)
                 messages.success(
@@ -61,7 +60,7 @@ def cadastro(request):
                 salvar = False
     return render(request, "cadastro.html")
 
-
+# História de usuário 3 (Página de Login)
 def login(request):
     if request.user.is_authenticated == True:
         return redirect('pag-inicial')
@@ -69,6 +68,7 @@ def login(request):
         cpf = request.POST.get('cpf')
         senha = request.POST.get('senha')
         # verrificar se CPF e Senha informada é igual no BD
+        # Autenticação Django
         user = authenticate(request, cpf=cpf, password=senha)
         if user is not None:
             authlogin(request,user)
@@ -80,7 +80,7 @@ def login(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
-
+# Historia de usuário 1 (Página Inicial)
 def pag_inicial(request):
     # se usuario esta autenticado libere
     if request.user.is_authenticated == True:
@@ -111,20 +111,18 @@ def pag_inicial(request):
                 VinculoSubforum.objects.get_or_create(cod_subforum=id_subforum[0], aluno= usuario_vinculado[0]) 
             except:
                 ...
+        # Apresentar informações detalhadas ( postagens | categoria | alunos vinculados | )
         subforuns_assoc = len(VinculoSubforum.objects.filter(aluno=_cpf[0]))
         vinculo_subforum =VinculoSubforum.objects.values_list('aluno', 'cod_subforum').filter(aluno=_cpf[0])
         subforums = list(Subforum.objects.values_list('titulo','descricao', 'nome_autor','cod_subforum', 'autor_id') )
         topicos = list((Topico.objects.values('cod_subforum').annotate(dcount=Count('cod_subforum'))))
         listagem_subforums = []
         for titulo, descricao, autor, cod_subforum, autor_id in subforums:
-            
             for cod_vinc in vinculo_subforum:
                 if cod_subforum == cod_vinc[1]:
                     for n in topicos:
-                        
                         if cod_subforum == n['cod_subforum']:
                             listagem_subforums.append((titulo, descricao,autor,cod_subforum,n['dcount']))
-                    
                     try:
                         if listagem_subforums[-1][3] != cod_subforum:
                             listagem_subforums.append((titulo, descricao,autor,cod_subforum,0))
@@ -145,7 +143,6 @@ def pag_inicial(request):
     else:
         return redirect('/') # se nao autenticado redireciona pra login
     
-    
 def post_subforum(request, cod_subforum):
     if request.user.is_authenticated == True:
         usuarios = CustomUser.objects.values_list('cpf','nome_social')
@@ -165,13 +162,8 @@ def post_subforum(request, cod_subforum):
             texto_resposta = request.POST.get('texto_resposta')
             _nome = request.user.nome_social
             cpf_vinculo = request.POST.get('cpf_vinculo')
-
-            
-
             if len(_nome) < 2:
                 _nome = request.user.nome_completo
-
-            
             try:
                 Topico.objects.create(cod_subforum =_cod_subforum[0], autor= _autor[0], nome_autor=_nome, titulo=titulo, descricao=descricao, data_criacao=datetime.datetime.now(), estado='Ativado' )
                 messages.success( request, 'Topico criado com sucesso!')
@@ -203,6 +195,9 @@ def post_subforum(request, cod_subforum):
                 except:
                     ...
             return redirect('/'+str(cod_subforum))
+        
+        # Verificar se o usuário tem acesso ao forum, se não tiver voltar pra página inicial
+
 
         perfil =  CustomUser.objects.filter(cpf=request.user.cpf).values_list('perfil') 
         respostas = Resposta.objects.values_list('cod_topico', 'autor', 'nome_autor', 'texto', 'data_criacao').order_by('-data_criacao')
@@ -214,9 +209,7 @@ def post_subforum(request, cod_subforum):
             for i in range(len(alunos_vinculados)):
                 if cod_subforum == str(alunos_vinculados[i][1]):
                     alunos_vinc_subforum = alunos_vinc_subforum+1
-        
-           
-        
+
         context = {
             'cod_subforum': cod_subforum,
             'alunos_vinc_subforum' : alunos_vinc_subforum,
