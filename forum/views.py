@@ -37,6 +37,10 @@ def cadastro(request):
         if _cpf.validate(cpf) == False:
             messages.error(request, 'CPF Inválido!')
             salvar = False
+        usuario = CustomUser.objects.filter(cpf = cpf )
+        if len(usuario) >= 1:
+            messages.error(request, 'CPF já cadastrado!')
+            salvar = False
     # Validar a Data Nascimento
         if validaData(nasc) == False:
             messages.error(request, 'Data inválida ou Menor de 18 anos!')
@@ -49,6 +53,7 @@ def cadastro(request):
         if termos != 'sim':
             messages.error(request, 'Voce precisa concordar com os temos de uso!')
             salvar = False
+
         if salvar and True:
             try:
                 CustomUser.objects.create_user(nome_completo=nome_completo, nome_social=nome_social, cpf=cpf, nasc=nasc, estado=estado, cidade=cidade, password=senha1)
@@ -211,11 +216,7 @@ def post_subforum(request, cod_subforum):
                 if cod_subforum == str(alunos_vinculados[i][1]):
                     alunos_vinc_subforum = alunos_vinc_subforum+1
         # não permitir que usuario acesse um subforum em que não está vinculado
-        if len(alunos_vinculados)>0:
-            for i in range(len(alunos_vinculados)):
-                if cod_subforum == str(alunos_vinculados[i][1]):
-                    if request.user.cpf not in str(alunos_vinculados[i][0]):
-                        return redirect('/')
+        
 
         context = {
             'cod_subforum': cod_subforum,
@@ -229,5 +230,14 @@ def post_subforum(request, cod_subforum):
             'usuarios' : usuarios,
             'perfil' : perfil[0][0]
             }
-        return render(request, "subforum.html", context)
-        
+
+        if len(alunos_vinculados)>0:
+            existe_vinc = False 
+            for i in alunos_vinculados:
+                if cod_subforum == str(i[1]):
+                    existe_vinc = True
+            if existe_vinc == True:
+                return render(request, "subforum.html", context)
+            else:
+                return redirect('/')
+        #return render(request, "subforum.html", context)
